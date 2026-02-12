@@ -2,21 +2,18 @@
 
 A collection of Ansible playbooks to set up and configure a homelab environment.
 
-These playbooks are designed to run on **Ubuntu LXC containers hosted on Proxmox**.
+These playbooks are designed to run on Ubuntu LXC containers hosted on Proxmox.
 
-## 📦 Prerequisites
+## Prerequisites
 
 Before getting started, make sure you have:
 
-* A **Cloudflare account**
-  * Required for API access SSL generation
-    * with Read and Write permissions on Zone.SSL and Certificates
+* **Cloudflare API token**
+  * `Zone` - `SSL and Certificates` with `Read` and `Write` permissions to all or specific zone/s
     
-* **Proxmox**
-  * Running Ubuntu LXC containers
-* Python dependency:
+* **Python dependency**
   ```bash
-  pip install passlib
+  pip install passlib # To configure password to users
   ```
 
 ## Getting Started
@@ -24,18 +21,17 @@ Before getting started, make sure you have:
 ### 1) Clone the Repository
 
 ```bash
-git clone https://github.com/aleksanderkaasik/ansible-homelab.git
+git clone
 cd ansible-homelab
 ```
-
 
 ### 2) Configure Hosts
 
 Edit the `hosts` file and add your homelab servers, including:
-- `ip_address`
-- `domain_name`
 
-
+> Note:  
+> `ip_address` and `domain_name` are required for web appliavtions and generating SSL certifications  
+> And for `uuid`, `token_id` and `token` varaibles that needs pterodactyl panel to geneeate them
 
 ### 3) Configure Variables
 
@@ -47,36 +43,32 @@ variables/main.yml
 
 Make sure all values match your environment.
 
+### 4) Running the Playbooks
 
+* ### *Option 1)* Run everything at once
 
-## Running the Playbooks
+  Make the script executable and run it:
 
-### Option 1 — Run everything at once
+  **Linux / MacOS**
 
-Make the script executable and run it:
+  ```bash
+  chmod +x main.sh
+  ./main.sh
+  ```
 
-**Linux / MacOS**
+  > Note:  
+  > `pterodactyl-wing.yml` is currently excluded.  
+  > The connection ID automation for Wings agents is not yet implemented.
 
-```bash
-chmod +x main.sh
-./main.sh
-```
+* ### *Option 2)* Run playbooks individually
 
-> Note:  
-> `pterodactyl-wing.yml` is currently excluded.  
-> The connection ID automation for Wings agents is not yet implemented.
+  You can also execute each playbook manually:
 
+  ```bash
+  ansible-playbook playbook-name.yml
+  ```
 
-### Option 2 — Run playbooks individually
+  Replace `playbook-name.yml` with the specific playbook you want to run.
 
-You can also execute each playbook manually:
-
-```bash
-ansible-playbook playbook-name.yml
-```
-
-Replace `playbook-name.yml` with the specific playbook you want to run.
-
-> Note:  
-> When it's a fresh install
->
+  > Note:  
+  > For fresh install of Uuntu LXC containers, use `ansible-playbook lxc-setup.yml -u root`  
